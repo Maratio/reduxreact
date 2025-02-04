@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { addCustomerAction, removeCustomerAction } from './store/customerReducer';
+import fetchCustomers from './AsyncAction/fetchCustomers';
 
 function App() {
   const dispatch = useDispatch()
@@ -56,7 +57,11 @@ function App() {
           style={{ width: 'auto', height: 30, background: 'yellow', margin: 20 }}>
           Удалить клиента
         </button>
-
+        <button
+          onClick={() => dispatch(fetchCustomers())}
+          style={{ width: 'auto', height: 30, background: 'pink', margin: 20 }}>
+          Получать клиентов из базы
+        </button>
       </div>
       {(customers.length > 0)
         ?
