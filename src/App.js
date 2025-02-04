@@ -1,80 +1,49 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { addCustomerAction, removeCustomerAction } from './store/customerReducer';
-import fetchCustomers from './AsyncAction/fetchCustomers';
+import { useDispatch, useSelector } from 'react-redux';
+import { asyncDecCreator, asyncIncCreator } from './store/countReducer';
+import { fetchUsers } from './store/userReducer';
 
 function App() {
   const dispatch = useDispatch()
-  const cash = useSelector((state) => state.cashReducer.cash)
-  const customers = useSelector((state) => state.customerReducer.customers)
-
-  console.log(cash);
-
-
-  const addCash = (newcash) => {
-    dispatch({ type: 'ADD_CASH', payload: newcash })
-  }
-
-  const getCash = (newcash) => {
-    dispatch({ type: 'GET_CASH', payload: newcash })
-  }
-
-  const addCustomer  = (name) => {
-    const customer = {
-      name,
-      id: Date.now()
-    }
-    dispatch(addCustomerAction(customer))
-  }
-
-  const removeCustomer  = (customer) => {
-    dispatch(removeCustomerAction(customer.id))
-  }
+  const count = useSelector((state) => state.countReducer.count)
+  const users = useSelector((state) => state.userReducer.users)
 
 
   return (
     <div>
       <div style={{
         fontSize: '3rem'
-      }}>{cash}</div>
+      }}>
+        {count}
+        </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <button
-          onClick={() => addCash(Number(prompt()))}
+          onClick={() => dispatch(asyncIncCreator())}
           style={{ width: 'auto', height: 30, background: 'green', margin: 20 }}>
-          Пополнить счет
+          Инкремент
         </button>
         <button
-          onClick={() => getCash(Number(prompt()))}
+          onClick={() => dispatch(asyncDecCreator())}
           style={{ width: 'auto', height: 30, background: 'green', margin: 20 }}>
-          Снять со счета
+          Дикремент
         </button>
         <button
-          onClick={() => addCustomer(prompt())}
+          onClick={() => dispatch(fetchUsers())}
           style={{ width: 'auto', height: 30, background: 'yellow', margin: 20 }}>
-          Добавить клиента
-        </button>
-        <button
-          onClick={() => removeCustomer(Number(prompt()))}
-          style={{ width: 'auto', height: 30, background: 'yellow', margin: 20 }}>
-          Удалить клиента
-        </button>
-        <button
-          onClick={() => dispatch(fetchCustomers())}
-          style={{ width: 'auto', height: 30, background: 'pink', margin: 20 }}>
-          Получать клиентов из базы
+          Получить юзеров
         </button>
       </div>
-      {(customers.length > 0)
+      {users.length > 0
         ?
         <div >
-          {customers.map((customer) =>
-            <div onClick={() => removeCustomer(customer)} style={{border:'1px solid black', padding: 10, marginTop: 5}} key={customer.id}>
-              {customer.name}
+          {users.map((user) =>
+            <div style={{border:'1px solid black', padding: 10, marginTop: 5}} key={user.id}>
+              {user.name}
             </div>
           )}
         </div>
         :
         <div style={{ fontSize: '2rem', marginTop: 20 }}>
-          Клиенты отсутствуют
+          Юзеры отсутствуют
         </div>
 
       }
